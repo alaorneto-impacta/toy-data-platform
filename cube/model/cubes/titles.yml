@@ -1,0 +1,59 @@
+cubes:
+  - name: titles
+    sql_table: refined.ml.fct_titles
+
+    description: >
+      Fato de títulos no grão de um título (`title_key`). Cada linha é um título
+      distinto, então toda medida tem o denominador certo seja qual for a dimensão
+      usada para fatiar — inclusive as dimensões multi-valor (gênero, país), que
+      entram por tabelas de ponte.
+
+    # Ponte título ↔ gênero: um título aparece uma vez por gênero que possui.
+    # A `relationship` (uma linha do fato para muitas da ponte) é o que permite ao
+    # Cube deduplicar pelo `primary_key` do fato e não inflar `avg_rating`/`total_votes`.
+    joins:
+      - name: title_genre
+        relationship: one_to_many
+        sql: "{CUBE}.title_key = {title_genre}.title_key"
+
+      # Ponte título ↔ país: mesma ideia, só que país é parcial na origem.
+      - name: title_country
+        relationship: one_to_many
+        sql: "{CUBE}.title_key = {title_country}.title_key"
+
+    dimensions:
+      - name: title_key
+        description: Chave do título — é o grão do fato.
+        sql: title_key
+        type: string
+        primary_key: true
+
+      - name: title
+        sql: title
+        type: string
+
+      - name: release_year
+        description: Ano de lançamento.
+        sql: year_key
+        type: number
+
+      - name: title_type
+        description: Tipo do título (Movie / TV Show).
+        sql: type_key
+        type: string
+
+    measures:
+      - name: count_titles
+        description: Quantidade de títulos distintos.
+        type: count_distinct
+        sql: title_key
+
+      - name: avg_rating
+        description: Nota média da crítica.
+        type: avg
+        sql: rating
+
+      - name: total_votes
+        description: Total de votos da crítica.
+        type: sum
+        sql: votes

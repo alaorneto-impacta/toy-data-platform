@@ -170,6 +170,17 @@ services:
       - ./trino/etc:/usr/lib/trino/etc:ro
       - ./trino/catalog:/etc/trino/catalog
 
+  cube:
+    image: cubejs/cube:v1.8.6
+    env_file: cube/.env
+    ports:
+      - "4000:4000"      # API REST /v1/* e Playground
+      - "15432:15432"    # SQL API (protocolo Postgres)
+    volumes:
+      - ./cube:/cube/conf
+    depends_on:
+      - trino
+
   superset:
     init: true
     build:

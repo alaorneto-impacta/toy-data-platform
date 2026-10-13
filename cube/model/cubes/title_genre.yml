@@ -1,0 +1,17 @@
+cubes:
+  # Ponte título ↔ gênero do dbt (`bridge_title_genre`): uma linha por par
+  # (título, gênero). Existe só para o Cube alcançar a dimensão multi-valor
+  # `genre` a partir do fato; não declara medidas próprias.
+  - name: title_genre
+    sql_table: refined.ml.bridge_title_genre
+
+    dimensions:
+      - name: title_key
+        sql: title_key
+        type: string
+        primary_key: true
+
+      - name: genre
+        description: Gênero (um por linha).
+        sql: genre_key
+        type: string

@@ -1,0 +1,25 @@
+views:
+  # Fachada plana sobre o fato e as dimensões: os consumidores (Superset, agente)
+  # falam com um único nome e não precisam conhecer os joins do modelo.
+  - name: titles_overview
+
+    description: >
+      Medidas de títulos fatiáveis por ano, tipo, gênero e país. Uma medida só é
+      definida uma vez (no cubo `titles`); a view apenas a expõe.
+
+    cubes:
+      - join_path: titles
+        includes:
+          - release_year
+          - title_type
+          - count_titles
+          - avg_rating
+          - total_votes
+
+      - join_path: titles.title_genre
+        includes:
+          - genre
+
+      - join_path: titles.title_country
+        includes:
+          - country

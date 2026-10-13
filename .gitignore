@@ -1,4 +1,5 @@
 *-data/
+.cubestore/
 venv
 __pycache__
 target/

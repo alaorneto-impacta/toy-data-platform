@@ -1,0 +1,16 @@
+cubes:
+  # Ponte título ↔ país do dbt (`bridge_title_country`): uma linha por par
+  # (título, país). País é parcial na origem — títulos sem país não aparecem aqui.
+  - name: title_country
+    sql_table: refined.ml.bridge_title_country
+
+    dimensions:
+      - name: title_key
+        sql: title_key
+        type: string
+        primary_key: true
+
+      - name: country
+        description: País (um por linha).
+        sql: country_key
+        type: string
