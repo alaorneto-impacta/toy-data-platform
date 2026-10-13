@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: dim_year
+    description: "Dimensão de tempo: um ano de lançamento (`year_key`) por linha."
+    columns:
+      - name: year_key
+        description: "Ano de lançamento do título (chave natural)."
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_type
+    description: "Dimensão de tipo de título: `Movie` ou `TV Show`."
+    columns:
+      - name: type_key
+        description: "Tipo do título (chave natural)."
+        tests:
+          - unique
+          - not_null
+
+  - name: fct_titles
+    description: >
+      Fato de títulos no grão de um título (`title_key`). Medidas: nota da crítica
+      (`rating`), total de votos (`votes`) e duração em minutos para filmes
+      (`duration_minutes`). Cada título aparece uma única vez, então a contagem de
+      títulos é estável ao fatiar por qualquer dimensão.
+    columns:
+      - name: title_key
+        description: "Chave natural do título, normalizado (minúsculas, sem espaços nas bordas)."
+        tests:
+          - unique
+          - not_null
+      - name: title
+        description: "Título para exibição, como veio do Netflix."
+        tests:
+          - not_null
+      - name: year_key
+        description: "Ano de lançamento, referência a `dim_year`."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_year')
+              field: year_key
+      - name: type_key
+        description: "Tipo do título, referência a `dim_type`."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_type')
+              field: type_key
+      - name: rating
+        description: "Nota da crítica (medida)."
+      - name: votes
+        description: "Total de pessoas que votaram (medida)."
+      - name: duration_minutes
+        description: "Duração em minutos para filmes; nulo para TV Show (medida)."
