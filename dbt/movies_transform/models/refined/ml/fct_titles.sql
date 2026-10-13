@@ -3,27 +3,12 @@
 -- Medidas: nota da crítica (`rating`), total de votos (`votes`) e duração em
 -- minutos para filmes (`duration_minutes`; TV Show não tem duração, tem temporadas).
 --
--- Regra de deduplicação: quando o mesmo título normalizado aparece em mais de um
--- registro na origem, mantém-se um único registro representativo — o de menor
--- `show_id` no Netflix e o de menor `release_date` na crítica — para que o grão
--- seja "um título" e a contagem não infle ao fatiar por dimensões.
+-- Regra de deduplicação: vem de `int_titles_attributes`, que mantém um único registro
+-- representativo por título (menor `show_id` no Netflix) — a mesma regra das tabelas de
+-- ponte de gênero e país, para que o grão seja "um título" e a contagem não infle ao
+-- fatiar por qualquer dimensão. Na origem da crítica o desempate é a menor `release_date`.
 
-with netflix as (
-
-    select
-        lower(trim(title)) as title_key,
-        title,
-        type,
-        release_year,
-        duration,
-        row_number() over (
-            partition by lower(trim(title)) order by show_id
-        ) as rn
-    from {{ ref('netflix_titles') }}
-
-),
-
-critic as (
+with critic as (
 
     select
         lower(trim(title)) as title_key,
@@ -46,6 +31,6 @@ select
     try_cast(
         nullif(regexp_extract(n.duration, '(\d+)\s*min', 1), '') as integer
     ) as duration_minutes
-from netflix n
+from {{ ref('int_titles_attributes') }} n
 inner join critic c on n.title_key = c.title_key
-where n.rn = 1 and c.rn = 1
+where c.rn = 1

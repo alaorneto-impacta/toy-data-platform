@@ -19,6 +19,79 @@ models:
           - unique
           - not_null
 
+  - name: dim_genre
+    description: >
+      Dimensão de gênero: um gênero (`genre_key`) por linha, derivado da ponte
+      título-gênero. Resolve o atributo multi-valor `listed_in` da origem.
+    columns:
+      - name: genre_key
+        description: "Gênero do título (chave natural)."
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_country
+    description: >
+      Dimensão de país: um país (`country_key`) por linha, derivado da ponte
+      título-país. Resolve o atributo multi-valor `country` da origem.
+    columns:
+      - name: country_key
+        description: "País de produção do título (chave natural)."
+        tests:
+          - unique
+          - not_null
+
+  - name: bridge_title_genre
+    description: >
+      Ponte título ↔ gênero, uma linha por par (título, gênero). Um título com N
+      gêneros aparece N vezes; fatiar uma medida por gênero filtra pela ponte em vez
+      de agregar a lista da origem, então nenhum título é contado duas vezes pelo mesmo gênero.
+    columns:
+      - name: title_genre_key
+        description: "Chave do par título-gênero (`title_key|genre_key`)."
+        tests:
+          - unique
+          - not_null
+      - name: title_key
+        description: "Título, referência a `fct_titles`."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('fct_titles')
+              field: title_key
+      - name: genre_key
+        description: "Gênero, referência a `dim_genre`."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_genre')
+              field: genre_key
+
+  - name: bridge_title_country
+    description: >
+      Ponte título ↔ país, uma linha por par (título, país). Um título produzido em N
+      países aparece N vezes. Títulos sem país na origem não entram na ponte.
+    columns:
+      - name: title_country_key
+        description: "Chave do par título-país (`title_key|country_key`)."
+        tests:
+          - unique
+          - not_null
+      - name: title_key
+        description: "Título, referência a `fct_titles`."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('fct_titles')
+              field: title_key
+      - name: country_key
+        description: "País, referência a `dim_country`."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_country')
+              field: country_key
+
   - name: fct_titles
     description: >
       Fato de títulos no grão de um título (`title_key`). Medidas: nota da crítica
