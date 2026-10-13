@@ -1,9 +1,25 @@
 DBT_IMAGE = movies_transform
 DBT_TARGET ?= dev
 NETWORK = platform-net
+DLT_IMAGE = my-dlt-pipeline
+DLT_TABLE ?= imdb_top_1000
 
 build: 
 	docker build -t $(DBT_IMAGE) dbt/
+
+# --- dlt ingestion (official path: run inside the Compose network) ---
+
+dlt-build:
+	docker build -t $(DLT_IMAGE) dlt/
+
+# Requires the stack to be up (`docker compose up -d`).
+# Pick the CSV to ingest with DLT_TABLE, e.g. `make dlt-run DLT_TABLE=netflix_titles`.
+dlt-run: dlt-build
+	docker run --rm \
+	    --env-file $(PWD)/dlt/.env.docker \
+	    --network $(NETWORK) \
+	    $(DLT_IMAGE) \
+	    python filesystem_pipeline.py -t $(DLT_TABLE)
 
 dbt-shell:
 	docker run --rm -v $(PWD)/dbt/$(DBT_IMAGE):/usr/app/$(DBT_IMAGE) \

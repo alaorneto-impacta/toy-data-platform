@@ -90,7 +90,9 @@ services:
         condition: service_completed_successfully
 
   minio:
-    image: minio/minio:RELEASE.2025-09-07T16-13-09Z
+    # MinIO removed its Docker Hub images; use Chainguard's public build
+    # (same MinIO server + mc client). Pinned to the `latest` index digest.
+    image: chainguard/minio@sha256:2136d593beacf4461187035eca949fe49abd589d5079735025c711ca58fee0c8
     ports:
       - "9000:9000"
       - "9001:9001"
@@ -102,7 +104,7 @@ services:
       - minio-data:/data
 
   createbuckets:
-    image: minio/minio:RELEASE.2025-09-07T16-13-09Z
+    image: chainguard/minio@sha256:2136d593beacf4461187035eca949fe49abd589d5079735025c711ca58fee0c8
     depends_on:
       - minio
     restart: on-failure
@@ -118,7 +120,7 @@ services:
 
 
   lakekeeper:
-    image: &lakekeeper-image ${LAKEKEEPER__SERVER_IMAGE:-quay.io/lakekeeper/catalog:v0.9.1}
+    image: &lakekeeper-image ${LAKEKEEPER__SERVER_IMAGE:-quay.io/lakekeeper/catalog:v0.12.4}
     pull_policy: &lakekeeper-pull-policy always
     environment: &lakekeeper-environment
       - LAKEKEEPER__PG_ENCRYPTION_KEY=This-is-NOT-Secure!

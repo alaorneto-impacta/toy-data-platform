@@ -25,9 +25,8 @@ env_vars = {
     "NORMALIZE__LOADER_FILE_FORMAT": "parquet",
     "PYICEBERG_CATALOG__RAW__URI": "http://lakekeeper:8181/catalog",
     "PYICEBERG_CATALOG__RAW__WAREHOUSE": "raw",
-    "ICEBERG_CATALOG__ICEBERG_CATALOG_NAME":"raw",
-    "ICEBERG_CATALOG__ICEBERG_CATALOG_TYPE":"rest",
-    "ICEBERG_CATALOG__ICEBERG_CATALOG_CONFIG__URI":"http://lakekeeper:8181/catalog"
+    "ICEBERG_CATALOG__ICEBERG_CATALOG_NAME": "raw",
+    "ICEBERG_CATALOG__ICEBERG_CATALOG_TYPE": "rest",
 }
 
 with models.DAG(
