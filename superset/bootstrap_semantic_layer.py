@@ -38,28 +38,30 @@ DATABASE_NAME = "Cube — camada semântica"
 DATASET_TABLE = "titles_overview"
 DATASET_SCHEMA = "public"
 
-# Medidas do Cube vistas pelo Superset. A SQL API exige que a agregação na
-# consulta case com o tipo da medida, daí `COUNT(DISTINCT ...)`/`AVG(...)`
-# em vez do nome cru. Limitação do "Postgres" que é o Cube, e vale a aula.
+# Medidas do Cube vistas pelo Superset. A forma canônica na SQL API é envolver a
+# medida com `MEASURE(...)`: funciona com medida de qualquer tipo e deixa o Cube
+# escolher a agregação. (As alternativas `AVG(...)`/`COUNT(DISTINCT ...)` também
+# existem, mas precisam casar com o tipo da medida — ver
+# docs.cube.dev/reference/core-data-apis/sql-api/query-format.)
 METRICS = [
     {
         "metric_name": "count_titles",
         "verbose_name": "Títulos",
-        "expression": "COUNT(DISTINCT count_titles)",
+        "expression": "MEASURE(count_titles)",
         "metric_type": "count_distinct",
         "description": "Quantidade de títulos distintos.",
     },
     {
         "metric_name": "avg_rating",
         "verbose_name": "Nota média",
-        "expression": "AVG(avg_rating)",
+        "expression": "MEASURE(avg_rating)",
         "metric_type": "avg",
         "description": "Nota média da crítica.",
     },
     {
         "metric_name": "total_votes",
         "verbose_name": "Total de votos",
-        "expression": "SUM(total_votes)",
+        "expression": "MEASURE(total_votes)",
         "metric_type": "sum",
         "description": "Soma dos votos recebidos.",
     },
