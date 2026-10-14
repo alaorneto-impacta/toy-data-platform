@@ -7,6 +7,20 @@ DLT_TABLE ?= imdb_top_1000
 build: 
 	docker build -t $(DBT_IMAGE) dbt/
 
+# --- dbt transformation (roda em container na rede do Compose, como o dlt) ---
+
+# Seeds + models + testes de dados, na ordem de dependência (`dbt build`).
+# É o comando único de transformação do caminho do README.
+# Requires the stack to be up (`docker compose up -d`) and the raw tables ingested.
+dbt-build: build
+	docker run --rm \
+	    -v $(PWD)/dbt/$(DBT_IMAGE):/usr/app/$(DBT_IMAGE) \
+	    --env-file $(PWD)/dbt/.env \
+	    --network $(NETWORK) \
+	    -w /usr/app/$(DBT_IMAGE) \
+	    $(DBT_IMAGE) \
+	    dbt build
+
 # --- dlt ingestion (official path: run inside the Compose network) ---
 
 dlt-build:
