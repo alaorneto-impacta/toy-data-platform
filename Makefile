@@ -51,3 +51,14 @@ docs: docs-generate
 	  -w /usr/app/$(DBT_IMAGE)/target \
 	  -it $(DBT_IMAGE) \
 	  python3 -m http.server 8082
+
+# --- agente MCP (roda no host, fala com o Cube publicado em localhost:4000) ---
+
+mcp-install:
+	python3 -m venv mcp/.venv && mcp/.venv/bin/pip install -r mcp/requirements.txt
+
+mcp-test:
+	mcp/.venv/bin/python -m unittest discover -s mcp/tests -v
+
+mcp-demo:
+	mcp/.venv/bin/python mcp/demo.py

@@ -1,0 +1,337 @@
+{
+  "cubes": [
+    {
+      "name": "title_country",
+      "type": "cube",
+      "title": "Title Country",
+      "isVisible": true,
+      "public": true,
+      "connectedComponent": 1,
+      "measures": [],
+      "dimensions": [
+        {
+          "name": "title_country.title_key",
+          "title": "Title Country Title Key",
+          "type": "string",
+          "shortTitle": "Title Key",
+          "suggestFilterValues": true,
+          "isVisible": false,
+          "public": false,
+          "primaryKey": true
+        },
+        {
+          "name": "title_country.country",
+          "title": "Title Country Country",
+          "type": "string",
+          "description": "País (um por linha).",
+          "shortTitle": "Country",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        }
+      ],
+      "segments": [],
+      "hierarchies": [],
+      "folders": [],
+      "nestedFolders": []
+    },
+    {
+      "name": "title_genre",
+      "type": "cube",
+      "title": "Title Genre",
+      "isVisible": true,
+      "public": true,
+      "connectedComponent": 1,
+      "measures": [],
+      "dimensions": [
+        {
+          "name": "title_genre.title_key",
+          "title": "Title Genre Title Key",
+          "type": "string",
+          "shortTitle": "Title Key",
+          "suggestFilterValues": true,
+          "isVisible": false,
+          "public": false,
+          "primaryKey": true
+        },
+        {
+          "name": "title_genre.genre",
+          "title": "Title Genre Genre",
+          "type": "string",
+          "description": "Gênero (um por linha).",
+          "shortTitle": "Genre",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        }
+      ],
+      "segments": [],
+      "hierarchies": [],
+      "folders": [],
+      "nestedFolders": []
+    },
+    {
+      "name": "titles",
+      "type": "cube",
+      "title": "Titles",
+      "isVisible": true,
+      "public": true,
+      "description": "Fato de títulos no grão de um título (`title_key`). Cada linha é um título distinto, então toda medida tem o denominador certo seja qual for a dimensão usada para fatiar — inclusive as dimensões multi-valor (gênero, país), que entram por tabelas de ponte.\n",
+      "connectedComponent": 1,
+      "measures": [
+        {
+          "name": "titles.count_titles",
+          "title": "Titles Count Titles",
+          "description": "Quantidade de títulos distintos.",
+          "shortTitle": "Count Titles",
+          "formatDescription": {
+            "name": "number",
+            "specifier": ",.2~f"
+          },
+          "cumulativeTotal": false,
+          "cumulative": false,
+          "type": "number",
+          "aggType": "countDistinct",
+          "drillMembers": [],
+          "drillMembersGrouped": {
+            "measures": [],
+            "dimensions": []
+          },
+          "isVisible": true,
+          "public": true
+        },
+        {
+          "name": "titles.avg_rating",
+          "title": "Titles Avg Rating",
+          "description": "Nota média da crítica.",
+          "shortTitle": "Avg Rating",
+          "formatDescription": {
+            "name": "number",
+            "specifier": ",.2~f"
+          },
+          "cumulativeTotal": false,
+          "cumulative": false,
+          "type": "number",
+          "aggType": "avg",
+          "drillMembers": [],
+          "drillMembersGrouped": {
+            "measures": [],
+            "dimensions": []
+          },
+          "isVisible": true,
+          "public": true
+        },
+        {
+          "name": "titles.total_votes",
+          "title": "Titles Total Votes",
+          "description": "Total de votos da crítica.",
+          "shortTitle": "Total Votes",
+          "formatDescription": {
+            "name": "number",
+            "specifier": ",.2~f"
+          },
+          "cumulativeTotal": false,
+          "cumulative": false,
+          "type": "number",
+          "aggType": "sum",
+          "drillMembers": [],
+          "drillMembersGrouped": {
+            "measures": [],
+            "dimensions": []
+          },
+          "isVisible": true,
+          "public": true
+        }
+      ],
+      "dimensions": [
+        {
+          "name": "titles.title_key",
+          "title": "Titles Title Key",
+          "type": "string",
+          "description": "Chave do título — é o grão do fato.",
+          "shortTitle": "Title Key",
+          "suggestFilterValues": true,
+          "isVisible": false,
+          "public": false,
+          "primaryKey": true
+        },
+        {
+          "name": "titles.title",
+          "title": "Titles Title",
+          "type": "string",
+          "shortTitle": "Title",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "titles.release_year",
+          "title": "Titles Release Year",
+          "type": "number",
+          "description": "Ano de lançamento.",
+          "shortTitle": "Release Year",
+          "suggestFilterValues": true,
+          "formatDescription": {
+            "name": "number",
+            "specifier": ",.2~f"
+          },
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "titles.title_type",
+          "title": "Titles Title Type",
+          "type": "string",
+          "description": "Tipo do título (Movie / TV Show).",
+          "shortTitle": "Title Type",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        }
+      ],
+      "segments": [],
+      "hierarchies": [],
+      "folders": [],
+      "nestedFolders": []
+    },
+    {
+      "name": "titles_overview",
+      "type": "view",
+      "title": "Titles Overview",
+      "isVisible": true,
+      "public": true,
+      "description": "Medidas de títulos fatiáveis por ano, tipo, gênero e país. Uma medida só é definida uma vez (no cubo `titles`); a view apenas a expõe.\n",
+      "measures": [
+        {
+          "name": "titles_overview.count_titles",
+          "title": "Titles Overview Count Titles",
+          "description": "Quantidade de títulos distintos.",
+          "shortTitle": "Count Titles",
+          "formatDescription": {
+            "name": "number",
+            "specifier": ",.2~f"
+          },
+          "cumulativeTotal": false,
+          "cumulative": false,
+          "type": "number",
+          "aggType": "countDistinct",
+          "drillMembers": [],
+          "drillMembersGrouped": {
+            "measures": [],
+            "dimensions": []
+          },
+          "aliasMember": "titles.count_titles",
+          "isVisible": true,
+          "public": true
+        },
+        {
+          "name": "titles_overview.avg_rating",
+          "title": "Titles Overview Avg Rating",
+          "description": "Nota média da crítica.",
+          "shortTitle": "Avg Rating",
+          "formatDescription": {
+            "name": "number",
+            "specifier": ",.2~f"
+          },
+          "cumulativeTotal": false,
+          "cumulative": false,
+          "type": "number",
+          "aggType": "avg",
+          "drillMembers": [],
+          "drillMembersGrouped": {
+            "measures": [],
+            "dimensions": []
+          },
+          "aliasMember": "titles.avg_rating",
+          "isVisible": true,
+          "public": true
+        },
+        {
+          "name": "titles_overview.total_votes",
+          "title": "Titles Overview Total Votes",
+          "description": "Total de votos da crítica.",
+          "shortTitle": "Total Votes",
+          "formatDescription": {
+            "name": "number",
+            "specifier": ",.2~f"
+          },
+          "cumulativeTotal": false,
+          "cumulative": false,
+          "type": "number",
+          "aggType": "sum",
+          "drillMembers": [],
+          "drillMembersGrouped": {
+            "measures": [],
+            "dimensions": []
+          },
+          "aliasMember": "titles.total_votes",
+          "isVisible": true,
+          "public": true
+        }
+      ],
+      "dimensions": [
+        {
+          "name": "titles_overview.release_year",
+          "title": "Titles Overview Release Year",
+          "type": "number",
+          "description": "Ano de lançamento.",
+          "shortTitle": "Release Year",
+          "suggestFilterValues": true,
+          "formatDescription": {
+            "name": "number",
+            "specifier": ",.2~f"
+          },
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "titles.release_year"
+        },
+        {
+          "name": "titles_overview.title_type",
+          "title": "Titles Overview Title Type",
+          "type": "string",
+          "description": "Tipo do título (Movie / TV Show).",
+          "shortTitle": "Title Type",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "titles.title_type"
+        },
+        {
+          "name": "titles_overview.genre",
+          "title": "Titles Overview Genre",
+          "type": "string",
+          "description": "Gênero (um por linha).",
+          "shortTitle": "Genre",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "title_genre.genre"
+        },
+        {
+          "name": "titles_overview.country",
+          "title": "Titles Overview Country",
+          "type": "string",
+          "description": "País (um por linha).",
+          "shortTitle": "Country",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "title_country.country"
+        }
+      ],
+      "segments": [],
+      "hierarchies": [],
+      "folders": [],
+      "nestedFolders": []
+    }
+  ]
+}

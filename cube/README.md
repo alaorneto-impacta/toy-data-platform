@@ -39,6 +39,12 @@ Medidas: `count_titles`, `avg_rating`, `total_votes`. Dimensões: `release_year`
 Fatiar por uma dimensão multi-valor **não** infla as medidas: o `primary_key:
 title_key` no fato faz o Cube deduplicar pelo grão ao atravessar a ponte.
 
+A dimensão de ponte entra por **LEFT JOIN** — é o que permite fatiar sem perder o
+fato. Como país é parcial na origem, os títulos sem país aparecem numa linha
+`country = null` (36 dos 1813). Quem pergunta por país filtra
+`{"member": "titles_overview.country", "operator": "set"}`; é o que o demo do MCP
+faz (`mcp/README.md`).
+
 ## Consultar
 
 REST:

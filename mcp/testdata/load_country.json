@@ -1,0 +1,180 @@
+{
+  "query": {
+    "measures": [
+      "titles_overview.count_titles",
+      "titles_overview.avg_rating"
+    ],
+    "dimensions": [
+      "titles_overview.country"
+    ],
+    "timeDimensions": [],
+    "limit": 5,
+    "timezone": "UTC",
+    "filters": [],
+    "rowLimit": 5
+  },
+  "lastRefreshTime": "2026-10-14T22:03:54.641Z",
+  "refreshKeyValues": [
+    {
+      "isWrapper": true,
+      "cache": [
+        {
+          "refresh_key": "14933460"
+        }
+      ],
+      "cached": true,
+      "isNative": true,
+      "jsResult": null,
+      "transformData": null,
+      "rootResultObject": {},
+      "0": {
+        "refresh_key": "14933460"
+      },
+      "length": 1
+    },
+    {
+      "isWrapper": true,
+      "cache": [
+        {
+          "refresh_key": "14933460"
+        }
+      ],
+      "cached": true,
+      "isNative": true,
+      "jsResult": null,
+      "transformData": null,
+      "rootResultObject": {},
+      "0": {
+        "refresh_key": "14933460"
+      },
+      "length": 1
+    }
+  ],
+  "transformedQuery": {
+    "sortedDimensions": [
+      "titles_overview.country"
+    ],
+    "sortedTimeDimensions": [],
+    "timeDimensions": [],
+    "measures": [
+      "titles_overview.count_titles",
+      "titles_overview.avg_rating"
+    ],
+    "leafMeasureAdditive": false,
+    "leafMeasures": [
+      "titles.count_titles",
+      "titles.avg_rating"
+    ],
+    "leafMeasuresFullPaths": [
+      "titles.count_titles",
+      "titles.avg_rating"
+    ],
+    "measureToLeafMeasures": {
+      "titles_overview.count_titles": [
+        {
+          "measure": "titles.count_titles",
+          "additive": false,
+          "type": "countDistinct"
+        }
+      ],
+      "titles_overview.avg_rating": [
+        {
+          "measure": "titles.avg_rating",
+          "additive": false,
+          "type": "avg"
+        }
+      ]
+    },
+    "hasNoTimeDimensionsWithoutGranularity": true,
+    "allFiltersWithinSelectedDimensions": true,
+    "isAdditive": false,
+    "granularityHierarchies": {},
+    "hasMultipliedMeasures": true,
+    "hasCumulativeMeasures": false,
+    "windowGranularity": null,
+    "filterDimensionsSingleValueEqual": {},
+    "ownedDimensions": [
+      "titles.title_country.country"
+    ],
+    "ownedTimeDimensionsWithRollupGranularity": [],
+    "ownedTimeDimensionsAsIs": [],
+    "allBackAliasMembers": {
+      "titles.count_titles": "titles_overview.count_titles",
+      "titles.avg_rating": "titles_overview.avg_rating",
+      "titles.title_country.country": "titles_overview.country"
+    },
+    "ungrouped": null,
+    "sortedUsedCubePrimaryKeys": null,
+    "sortedAllCubeNames": null,
+    "hasMultiStage": false
+  },
+  "requestId": "60cc4bda-00ca-43f4-a301-e9ada602a082-span-1",
+  "annotation": {
+    "timeDimensions": {},
+    "measures": {
+      "titles_overview.avg_rating": {
+        "title": "Titles Overview Avg Rating",
+        "shortTitle": "Avg Rating",
+        "description": "Nota média da crítica.",
+        "type": "number",
+        "drillMembers": [],
+        "drillMembersGrouped": {
+          "measures": [],
+          "dimensions": []
+        }
+      },
+      "titles_overview.count_titles": {
+        "title": "Titles Overview Count Titles",
+        "shortTitle": "Count Titles",
+        "description": "Quantidade de títulos distintos.",
+        "type": "number",
+        "drillMembers": [],
+        "drillMembersGrouped": {
+          "measures": [],
+          "dimensions": []
+        }
+      }
+    },
+    "dimensions": {
+      "titles_overview.country": {
+        "title": "Titles Overview Country",
+        "shortTitle": "Country",
+        "description": "País (um por linha).",
+        "type": "string"
+      }
+    },
+    "segments": {}
+  },
+  "dataSource": "default",
+  "dbType": "trino",
+  "extDbType": "cubestore",
+  "external": false,
+  "slowQuery": false,
+  "data": [
+    {
+      "titles_overview.country": "United States",
+      "titles_overview.count_titles": "1380",
+      "titles_overview.avg_rating": "6.603081664098616"
+    },
+    {
+      "titles_overview.country": "United Kingdom",
+      "titles_overview.count_titles": "309",
+      "titles_overview.avg_rating": "6.841549295774649"
+    },
+    {
+      "titles_overview.country": "France",
+      "titles_overview.count_titles": "147",
+      "titles_overview.avg_rating": "6.705882352941177"
+    },
+    {
+      "titles_overview.country": "Canada",
+      "titles_overview.count_titles": "128",
+      "titles_overview.avg_rating": "6.314166666666667"
+    },
+    {
+      "titles_overview.country": "Germany",
+      "titles_overview.count_titles": "92",
+      "titles_overview.avg_rating": "7.073333333333333"
+    }
+  ]
+}
