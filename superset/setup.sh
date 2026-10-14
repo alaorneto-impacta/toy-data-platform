@@ -1,23 +1,18 @@
+#!/usr/bin/env bash
+# Inicialização do Superset: metadata DB, admin e assets padrão.
+# Roda a cada `docker compose up`, então precisa ser idempotente.
+set -e
+
+# Sai com erro se o admin já existe (segundo boot em diante) — não é falha.
 superset fab create-admin \
   --username admin \
   --firstname Superset \
   --lastname Admin \
   --email admin@localhost \
-  --password secret && \
-superset db upgrade && \
-superset init && \
-python <<EOF
-from superset import security_manager
-from superset.models.core import User
-from flask_appbuilder.security.sqla.models import Role
-from superset.extensions import db
+  --password secret \
+  || echo "aviso: usuário admin já existe; seguindo"
 
-admin_user = db.session.query(User).filter_by(username='admin').first()
-admin_role = db.session.query(Role).filter_by(name='Admin').first()
+superset db upgrade
+superset init
 
-if admin_role not in admin_user.roles:
-    admin_user.roles.append(admin_role)
-    db.session.commit()
-EOF
-
-/usr/bin/run-server.sh
+exec /usr/bin/run-server.sh

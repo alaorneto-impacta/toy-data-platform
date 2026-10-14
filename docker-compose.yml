@@ -178,11 +178,23 @@ services:
       - "15432:15432"    # SQL API (protocolo Postgres)
     volumes:
       - ./cube:/cube/conf
+    healthcheck:
+      # /cubejs-api/v1/meta só responde 200 depois que o modelo YAML compila.
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://localhost:4000/cubejs-api/v1/meta').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
     depends_on:
       - trino
 
   superset:
     init: true
+    image: superset-semantico
     build:
       context: ./superset
       dockerfile: Dockerfile
@@ -194,6 +206,28 @@ services:
       - setup.sh
     ports:
       - '8088:8088'
+    depends_on:
+      superset-postgres:
+        condition: service_healthy
+
+  # Registra o Cube como banco do Superset (protocolo Postgres) e publica o
+  # dashboard de exemplo. Roda uma vez após o Superset subir; é idempotente.
+  # As credenciais da SQL API vêm de cube/.env — uma verdade só.
+  superset-bootstrap:
+    image: superset-semantico
+    build:
+      context: ./superset
+      dockerfile: Dockerfile
+    entrypoint: [ "python", "/app/bootstrap_semantic_layer.py" ]
+    env_file: cube/.env
+    environment:
+      - SUPERSET_URL=http://superset:8088
+    restart: "no"
+    depends_on:
+      superset:
+        condition: service_healthy
+      cube:
+        condition: service_healthy
 
   superset-postgres:
     init: true
@@ -206,6 +240,12 @@ services:
       - POSTGRES_PASSWORD=secretsecret
     ports:
       - "5434:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U superset -d superset" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
 
   bootstrap-lakekeeper:
     image: curlimages/curl
