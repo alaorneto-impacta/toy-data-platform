@@ -1,0 +1,11 @@
+{
+  "$schema": "https://raw.githubusercontent.com/can1357/oh-my-pi/main/packages/coding-agent/src/config/mcp-schema.json",
+  "mcpServers": {
+    "camada-semantica": {
+      "type": "stdio",
+      "command": "mcp/.venv/bin/python",
+      "args": ["mcp/server.py"],
+      "env": { "CUBE_URL": "${CUBE_URL:-http://localhost:4000}" }
+    }
+  }
+}

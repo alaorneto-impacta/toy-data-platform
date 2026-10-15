@@ -53,6 +53,26 @@ Trecho de configuração (Claude Desktop, Cursor etc. — ajuste os caminhos):
 }
 ```
 
+### omp
+
+O omp já vem configurado pelo `.omp/mcp.json` na raiz do repo (config nativa de
+projeto — precedência máxima na descoberta do omp). Os caminhos são relativos à raiz
+do projeto, porque o omp lança o servidor com o diretório do projeto como `cwd`:
+funciona tanto rodando `omp` daqui quanto de fora com `omp --cwd <repo>`. `CUBE_URL`
+usa o placeholder do omp (`${CUBE_URL:-http://localhost:4000}`): exportado no shell,
+o valor do ambiente vence.
+
+```bash
+docker compose up -d    # o Cube precisa estar publicado em localhost:4000
+make mcp-install        # mcp/.venv com o SDK — sem isso o comando não existe
+omp                     # e então: /mcp list · /mcp test camada-semantica
+```
+
+Editou o `.omp/mcp.json` com a sessão aberta? `/mcp reload` redescobre e reconecta —
+as ferramentas entram no contexto sem reiniciar. `/mcp add` monta a mesma entrada
+guiado, e `~/.omp/agent/mcp.json` é o nível do usuário, se você quiser o servidor em
+todo projeto.
+
 Com o cliente ligado, pergunte em português (*"qual país tem a melhor nota média?"*):
 o modelo chama as ferramentas e a resposta vem da mesma definição que o Superset usa.
 
