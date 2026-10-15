@@ -39,7 +39,11 @@ make mcp-demo
 ## Cliente MCP
 
 O transporte é stdio: qualquer cliente MCP aponta para o `server.py` desta pasta.
-Trecho de configuração (Claude Desktop, Cursor etc. — ajuste os caminhos):
+O repo já traz a entrada pronta num `.mcp.json` na raiz (config de escopo de projeto,
+com caminhos relativos à própria raiz), então cliente que lê config de projeto
+encontra o servidor sozinho — inclusive pedindo aprovação na primeira vez, se for o
+caso. Cliente que não lê config de projeto, ou que quer o servidor em todos os
+projetos, copia o trecho ajustando os caminhos:
 
 ```json
 {
@@ -53,35 +57,8 @@ Trecho de configuração (Claude Desktop, Cursor etc. — ajuste os caminhos):
 }
 ```
 
-### Claude Code e omp (o mesmo `.mcp.json`)
-
-A raiz do repo tem um `.mcp.json`: é o arquivo de escopo de projeto do Claude Code,
-feito para ser versionado e compartilhado com quem clonar. O omp lê o mesmo arquivo
-pelo caminho de fallback dele, então a entrada acima serve os dois clientes — sem
-duas verdades. Dois detalhes de portabilidade:
-
-- **caminhos relativos à raiz do projeto**: o Claude Code roda um servidor declarado
-  num `.mcp.json` de projeto com o diretório do projeto como `cwd`, e o omp faz o
-  mesmo — funciona inclusive com `omp --cwd <repo>` a partir de fora. Nenhum path de
-  máquina entra num repo público.
-- **`CUBE_URL` pelo placeholder** `${CUBE_URL:-http://localhost:4000}`, que os dois
-  clientes expandem: exportado no shell, o valor do ambiente vence o default.
-
-```bash
-docker compose up -d    # o Cube precisa estar publicado em localhost:4000
-make mcp-install        # mcp/.venv com o SDK — sem isso o comando não existe
-```
-
-No **Claude Code**, servidor de escopo de projeto passa por aprovação: a primeira
-sessão interativa (`claude`) mostra `⏸ Pending approval` e pede confirmação. Uma
-aprovação commitada no repo é ignorada enquanto a pasta não é confiada — de
-propósito, para um clone não conseguir se aprovar sozinho. Aprovado, `/mcp` mostra o
-status e as ferramentas entram.
-
-No **omp**: `/mcp list`, `/mcp test camada-semantica` e — se você editar o arquivo com
-a sessão aberta — `/mcp reload`, que redescobre e reconecta sem reiniciar. Precisa de
-precedência maior ou de override local? A config nativa do omp (`.omp/mcp.json`)
-ganha da raiz, e `~/.omp/agent/mcp.json` é o nível do usuário, para todos os projetos.
+`CUBE_URL` no `.mcp.json` do repo é `${CUBE_URL:-http://localhost:4000}` — exportado
+no shell, o valor do ambiente vence o default.
 
 Com o cliente ligado, pergunte em português (*"qual país tem a melhor nota média?"*):
 o modelo chama as ferramentas e a resposta vem da mesma definição que o Superset usa.
