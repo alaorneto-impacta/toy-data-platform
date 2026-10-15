@@ -22,22 +22,7 @@ engineering) está em [`GLOSSARY.md`](GLOSSARY.md).
 
 ## Arquitetura
 
-```mermaid
-flowchart LR
-  subgraph compose["stack local (docker compose)"]
-    dlt["dlt<br/>ingestão"] -->|"tabelas Iceberg"| minio[("MinIO<br/>raw / trusted / refined")]
-    minio --- lakekeeper["Lakekeeper<br/>catálogo Iceberg REST"]
-    trino["Trino<br/>engine SQL"] --- lakekeeper
-    dbt["dbt<br/>modelo dimensional"] -->|"trusted → refined"| trino
-    cube["Cube<br/>camada semântica"] -->|"lê refined.ml"| trino
-    superset["Superset<br/>BI"] -->|"protocolo Postgres"| cube
-    mcp["servidor MCP"] -->|"REST"| cube
-    airflow["Airflow<br/>orquestração"] -.-> dlt
-  end
-
-  csv["CSVs em dlt/data/"] --> dlt
-  mcp --> agent["agente de IA"]
-```
+![Arquitetura do stack: fontes → dlt → catálogo Iceberg (MinIO/Lakekeeper) → Trino → dbt → Cube (camada semântica) → Superset e servidor MCP → agente](eng-diagram.png)
 
 Dois pontos de arquitetura que a aula costuma perguntar estão em
 [Detalhes](#detalhes-que-a-aula-costuma-perguntar): por que o **dlt roda em
