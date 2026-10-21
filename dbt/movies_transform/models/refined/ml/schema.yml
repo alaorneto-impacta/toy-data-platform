@@ -57,15 +57,17 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('fct_titles')
-              field: title_key
+              arguments:
+                to: ref('fct_titles')
+                field: title_key
       - name: genre_key
         description: "Gênero, referência a `dim_genre`."
         tests:
           - not_null
           - relationships:
-              to: ref('dim_genre')
-              field: genre_key
+              arguments:
+                to: ref('dim_genre')
+                field: genre_key
 
   - name: bridge_title_country
     description: >
@@ -82,15 +84,17 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('fct_titles')
-              field: title_key
+              arguments:
+                to: ref('fct_titles')
+                field: title_key
       - name: country_key
         description: "País, referência a `dim_country`."
         tests:
           - not_null
           - relationships:
-              to: ref('dim_country')
-              field: country_key
+              arguments:
+                to: ref('dim_country')
+                field: country_key
 
   - name: fct_titles
     description: >
@@ -113,15 +117,17 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('dim_year')
-              field: year_key
+              arguments:
+                to: ref('dim_year')
+                field: year_key
       - name: type_key
         description: "Tipo do título, referência a `dim_type`."
         tests:
           - not_null
           - relationships:
-              to: ref('dim_type')
-              field: type_key
+              arguments:
+                to: ref('dim_type')
+                field: type_key
       - name: rating
         description: "Nota da crítica (medida)."
       - name: votes
