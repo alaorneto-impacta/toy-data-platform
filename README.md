@@ -188,14 +188,14 @@ gênero/país sem inflar as medidas).
 Roteiro de 5 minutos para rodar com o stack no ar, antes de entrar na sala:
 
 1. **Ingerir:** `make dlt-run DLT_TABLE=netflix_titles` → `8807` linhas em `raw.raw_movies.netflix_titles`.
-2. **Transformar:** `make dbt-build` → `Done. PASS=42`, e `refined.ml.fct_titles` com `1813` linhas = `1813` chaves distintas.
+2. **Transformar:** `make dbt-build` → `Done. PASS=45`, e `refined.ml.fct_titles` com `1813` linhas = `1813` chaves distintas.
 3. **Camada semântica:**
    ```bash
    docker run --rm --network platform-net -e PGPASSWORD=cubecubecube postgres:16 \
      psql -h cube -p 15432 -U cube -d cube \
      -c "SELECT title_type, MEASURE(count_titles), MEASURE(avg_rating) FROM titles_overview GROUP BY 1"
    ```
-   → `Movie 1673 / 6.627` e `TV Show 140 / 6.597` (sem dimensão: `1813 / 6.625 / 236310`).
+   → `Movie 1673 / 6.627` e `TV Show 140 / 6.597` (sem dimensão: `1813 / 6.625 / 322914`).
 4. **Superset:** o dashboard *Camada semântica — títulos* abre com o gráfico de barras e a tabela preenchidos.
 5. **Agente:** `make mcp-demo` → `Japan — nota média 7.079 em 29 títulos`.
 
