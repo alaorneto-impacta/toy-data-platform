@@ -19,10 +19,10 @@ dbt-build: build
 	    --network $(NETWORK) \
 	    -w /usr/app/$(DBT_IMAGE) \
 	    $(DBT_IMAGE) \
-	    sh -c 'dbt build && mkdir -p state && cp target/manifest.json state/'
+	    dbt build --target-path target/prod
 
 # Slim CI: em dev, constrói só o que mudou desde o último `make dbt-build` (o manifest
-# guardado em state/) e o que depende disso; o resto o `ref()` lê de prod (--defer),
+# de target/prod) e o que depende disso; o resto o `ref()` lê de prod (--defer),
 # mesmo que exista uma cópia velha em dev (--favor-state).
 dbt-slim: build
 	docker run --rm \
@@ -31,7 +31,8 @@ dbt-slim: build
 	    --network $(NETWORK) \
 	    -w /usr/app/$(DBT_IMAGE) \
 	    $(DBT_IMAGE) \
-	    dbt build --target dev --select state:modified+ --defer --favor-state --state state
+	    dbt build --target dev --target-path target/dev \
+	        --select state:modified+ --defer --favor-state --state target/prod
 
 # --- dlt ingestion (official path: run inside the Compose network) ---
 
