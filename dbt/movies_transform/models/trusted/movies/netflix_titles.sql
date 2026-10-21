@@ -2,10 +2,11 @@ WITH source AS (
     SELECT
         show_id,
         type,
-        LOWER(TRIM(title)) as title,
+        TRIM(title) as title,
         director,
         country,
-        TRY_CAST(date_added AS DATE) AS date_added,
+        -- a fonte traz "September 25, 2021"; um CAST para DATE só aceita "2021-09-25"
+        DATE(DATE_PARSE(TRIM(date_added), '%M %e, %Y')) AS date_added,
         release_year,
         rating,
         duration,
