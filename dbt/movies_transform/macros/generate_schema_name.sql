@@ -1,14 +1,13 @@
--- Usa o schema customizado declarado no dbt_project.yml como está.
---
--- O dbt, por padrão, prefixa o schema com o schema do target ("{{target.schema}}_{{custom}}"),
--- o que produziria `dev_lorransr_ml`/`prd_ml` em vez de `ml`. Este repositório declara os
--- schemas finais no projeto (`raw_movies`, `movies`, `delivery`, `ml`) — o mesmo padrão que a
--- ingestão já usa (`raw.raw_movies`) — então o schema customizado é usado verbatim.
+-- Em prod, usa o schema customizado do dbt_project.yml como está (`movies`, `ml`), o mesmo
+-- padrão da ingestão (`raw.raw_movies`). Fora de prod, prefixa com o schema do target
+-- (`dev_lorransr_ml`), para que cada pessoa construa sem sobrescrever produção.
 
 {% macro generate_schema_name(custom_schema_name, node) -%}
     {%- if custom_schema_name is none -%}
         {{ target.schema }}
-    {%- else -%}
+    {%- elif target.name == 'prod' -%}
         {{ custom_schema_name | trim }}
+    {%- else -%}
+        {{ target.schema }}_{{ custom_schema_name | trim }}
     {%- endif -%}
 {%- endmacro %}
