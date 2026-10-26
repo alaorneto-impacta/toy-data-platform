@@ -33,6 +33,9 @@ container** e por que o **Cube lê o Trino** em vez de os consumidores lerem o T
 - [Docker](https://www.docker.com/) com Docker Compose v2 (`docker compose`)
 - `make`
 - Python 3 — só para o **agente** rodar no host (etapa 5). O resto é tudo container.
+- VM do Docker com no mínimo **4 GB de RAM, 2 CPUs e 10 GB de disco livre**
+  (recomendado: 6 GB e 4 CPUs). Parado, o stack ocupa ~2,1 GB de RAM; o Trino
+  sozinho, ~760 MB, e cresce durante o `dbt build`.
 
 ## Caminho único (do zero)
 
@@ -51,6 +54,13 @@ de exemplo. Leva alguns minutos; o serviço que registra o Cube no Superset
 
 ```bash
 docker compose ps          # tudo `running`/`healthy` (os one-shot ficam `exited`)
+```
+
+Máquina apertada? O Airflow não entra nas etapas abaixo (a ingestão roda por
+`make dlt-run`). Suba só o resto e economize ~700 MB de RAM e 2,2 GB de disco:
+
+```bash
+docker compose up -d trino cube superset superset-bootstrap create-warehouse
 ```
 
 ### 2. Ingerir os CSVs
