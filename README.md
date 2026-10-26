@@ -197,7 +197,9 @@ gênero/país sem inflar as medidas).
 
 Roteiro de 5 minutos para rodar com o stack no ar, antes de entrar na sala:
 
-1. **Ingerir:** `make dlt-run DLT_TABLE=netflix_titles` → `8807` linhas em `raw.raw_movies.netflix_titles`.
+1. **Ingerir** as duas fontes do dbt:
+   `make dlt-run DLT_TABLE=netflix_titles` → `8807` linhas, e
+   `make dlt-run DLT_TABLE=meta_critic` → `16290` linhas, em `raw.raw_movies`.
 2. **Transformar:** `make dbt-build` → `Done. PASS=45`, e `refined.ml.fct_titles` com `1813` linhas = `1813` chaves distintas.
 3. **Camada semântica:**
    ```bash
