@@ -165,9 +165,11 @@ services:
     ports:
       - "8081:8080"
     image: "trinodb/trino:471"
+    # The image's jvm.config takes 80% of the RAM it sees as heap; without a
+    # limit that is 80% of the whole Docker VM.
+    mem_limit: 2g
     env_file: trino/.env
     volumes:
-      - ./trino/etc:/usr/lib/trino/etc:ro
       - ./trino/catalog:/etc/trino/catalog
 
   cube:
