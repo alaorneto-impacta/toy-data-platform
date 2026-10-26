@@ -312,6 +312,75 @@ server e o cliente `mc` (usado para criar os buckets).
 - Contas e senhas locais: `airflow/.env`, `trino/.env`, `dlt/.env.docker`,
   `dbt/.env`, `cube/.env` (todas com um `.sample`/par correspondente).
 
+
+## Implementação prática — Análise Cinematográfica (MBA Impacta)
+
+### Objetivo
+
+Desenvolver uma análise da evolução dos gêneros cinematográficos ao longo dos anos, utilizando uma plataforma moderna de dados com ingestão, transformação, armazenamento e visualização.
+
+### Arquitetura utilizada
+
+- **MinIO:** armazenamento dos dados.
+- **Lakekeeper:** gerenciamento dos catálogos Apache Iceberg.
+- **Trino:** consultas SQL sobre os dados.
+- **dbt:** transformação e modelagem analítica.
+- **Apache Superset:** criação do dashboard interativo.
+
+### Modelo analítico desenvolvido
+
+Foi criado o modelo `mart_genre_evolution`, localizado em:
+
+`dbt/movies_transform/models/refined/ml/mart_genre_evolution.sql`
+
+O modelo consolida os títulos por gênero e ano de lançamento, disponibilizando as métricas:
+
+- `total_titles`: quantidade de títulos distintos.
+- `avg_rating`: avaliação média.
+- `total_votes`: total de votos.
+
+Resultados obtidos:
+
+| Indicador | Resultado |
+|---|---:|
+| Combinações de gênero e ano | 659 |
+| Gêneros distintos | 40 |
+| Primeiro ano | 1956 |
+| Último ano | 2021 |
+
+### Dashboard Apache Superset
+
+Foi desenvolvido o dashboard **Análise Cinematográfica - MovieLens**, com três visualizações:
+
+1. Evolução dos Gêneros Cinematográficos por Ano.
+2. Top 10 Gêneros Cinematográficos por Quantidade de Títulos.
+3. Top 10 Gêneros Cinematográficos por Avaliação Média.
+
+A conexão utilizada no Superset foi configurada diretamente com o Trino, consultando a camada `refined.ml`.
+
+### Validação técnica
+
+A execução de `make dbt-build` foi concluída com sucesso:
+
+- PASS: 46
+- WARN: 0
+- ERROR: 0
+- SKIP: 0
+
+### Evidências
+
+A exportação do dashboard Superset está versionada no repositório:
+
+`evidencias/dashboard_export_20261026T215716.zip`
+
+O arquivo contém as definições do dashboard, dos três gráficos, do dataset e da conexão Trino.
+
+### Repositório da implementação
+
+https://github.com/alaorneto-impacta/toy-data-platform
+
+---
+
 ## Contribuindo
 
 Pull Requests são bem-vindos! Se tiver ideia ou encontrar problema, abra uma issue.
